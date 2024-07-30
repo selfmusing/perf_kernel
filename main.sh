@@ -24,6 +24,7 @@ DEVICE_ARCH="arch/arm64"
 
 # Clang
 CLANG_REPO="ZyCromerZ/Clang"
+CLANG_VERSION="19.0.0git-20240721-release"
 
 # ------------------------------------------------------------
 
@@ -69,8 +70,11 @@ fi
 # Set variables
 WORKDIR="$(pwd)"
 
-CLANG_DLINK="$(curl -s https://api.github.com/repos/$CLANG_REPO/releases/latest\
-| grep -wo "https.*" | grep Clang-.*.tar.gz | sed 's/.$//')"
+if [[ $CLANG_VERSION == "latest" ]]; then
+    CLANG_DLINK="$(curl -s https://api.github.com/repos/$CLANG_REPO/releases/latest | grep -wo "https.*" | grep Clang-.*.tar.gz | sed 's/.$//')"
+else 
+    CLANG_DLINK="$(curl -s https://api.github.com/repos/$CLANG_REPO/releases/tags/$CLANG_VERSION | grep -wo "https.*" | grep Clang-.*.tar.gz | sed 's/.$//')"
+fi
 CLANG_DIR="$WORKDIR/Clang/bin"
 
 KERNEL_REPO="${KERNEL_GIT::-4}/"
