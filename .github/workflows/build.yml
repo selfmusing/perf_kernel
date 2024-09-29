@@ -11,6 +11,10 @@ on:
         - KSU
         - NonKSU
         - KSU & NonKSU
+      KSU_Manager_Non_GKI:
+        required: true
+        type: boolean
+        default: false
       Kernel_Git:
         required: true
         type: string
@@ -40,12 +44,20 @@ on:
         type: string
         default: ubuntu-latest
 
-jobs:    
+jobs:
+  build-ksu-manager:
+    if: ${{ inputs.KSU_Manager_Non_GKI == true && (inputs.Build_Kernel == 'KSU' || inputs.Build_Kernel == 'KSU & NonKSU') }}
+    uses: ./.github/workflows/build-ksu-manager.yml
+    with:
+      os: ${{ inputs.os }}
+      
   build-ksu:
-    if: ${{ inputs.Build_Kernel == 'KSU' || inputs.Build_Kernel == 'KSU & NonKSU' }}
+    needs: [build-ksu-manager]
+    if: ${{ (inputs.Build_Kernel == 'KSU' || inputs.Build_Kernel == 'KSU & NonKSU') && !failure() && !cancelled() }}
     uses: ./.github/workflows/build-kernel.yml
     with:
       include_ksu: "KSU"
+      include_ksu_manager: ${{ inputs.KSU_Manager_Non_GKI }}
       kernel_git: ${{ inputs.Kernel_Git }}
       kernel_branch: ${{ inputs.Kernel_Branch }}
       anykernel3_git: ${{ inputs.AnyKernel3_Git }}
@@ -59,6 +71,7 @@ jobs:
     uses: ./.github/workflows/build-kernel.yml
     with:
       include_ksu: "NonKSU"
+      include_ksu_manager: "false"
       kernel_git: ${{ inputs.Kernel_Git }}
       kernel_branch: ${{ inputs.Kernel_Branch }}
       anykernel3_git: ${{ inputs.AnyKernel3_Git }}
@@ -68,7 +81,7 @@ jobs:
       os: ${{ inputs.os }}
       
   release:
-    needs: [build-ksu, build-nonksu]
+    needs: [build-ksu-manager, build-ksu, build-nonksu]
     if: |
       always() &&
       !failure() &&
