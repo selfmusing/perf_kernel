@@ -23,8 +23,8 @@ COMMON_DEFCONFIG=""
 DEVICE_ARCH="arch/arm64"
 
 # Clang
-CLANG_REPO="ZyCromerZ/Clang"
-CLANG_VERSION="19.0.0git-20240721-release"
+CLANG_REPO="platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/main"
+CLANG_VERSION="clang-r530567"
 
 # ------------------------------------------------------------
 
@@ -78,11 +78,6 @@ fi
 # Set variables
 WORKDIR="$(pwd)"
 
-if [[ $CLANG_VERSION == "latest" ]]; then
-    CLANG_DLINK="$(curl -s https://api.github.com/repos/$CLANG_REPO/releases/latest | grep -wo "https.*" | grep Clang-.*.tar.gz | sed 's/.$//')"
-else 
-    CLANG_DLINK="$(curl -s https://api.github.com/repos/$CLANG_REPO/releases/tags/$CLANG_VERSION | grep -wo "https.*" | grep Clang-.*.tar.gz | sed 's/.$//')"
-fi
 CLANG_DIR="$WORKDIR/Clang/bin"
 
 KERNEL_REPO="${KERNEL_GIT::-4}/"
@@ -90,7 +85,7 @@ KERNEL_SOURCE="${KERNEL_REPO::-1}/tree/$KERNEL_BRANCH"
 KERNEL_DIR="$WORKDIR/$KERNEL_NAME"
 
 KERNELSU_SOURCE="https://github.com/$KERNELSU_REPO"
-CLANG_SOURCE="https://github.com/$CLANG_REPO"
+CLANG_SOURCE="https://android.googlesource.com/$CLANG_REPO/$CLANG_VERSION.tar.gz"
 README="https://github.com/silvzr/bootlegger_kernel_archive/blob/master/README.md"
 
 if [[ ! -z "$COMMON_DEFCONFIG" ]]; then
@@ -119,8 +114,9 @@ cd $WORKDIR
 msg "Setup"
 
 msg "Clang"
+
 mkdir -p Clang
-aria2c -s16 -x16 -k1M $CLANG_DLINK -o Clang.tar.gz
+curl -o Clang.tar.gz $CLANG_SOURCE
 tar -C Clang/ -zxvf Clang.tar.gz
 rm -rf Clang.tar.gz
 
