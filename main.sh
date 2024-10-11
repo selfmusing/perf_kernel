@@ -144,7 +144,9 @@ cd $KERNEL_DIR
 KERNELSU_DIR=$(find . -mindepth 0 -maxdepth 4 \( -iname "ksu" -o -iname "kernelsu" \) -type d ! -path "*/.git/*" | cut -c3-)
 KERNELSU_GITMODULE=$(grep -i "KernelSU" .gitmodules)
 
+# Import patches
 cd $WORKDIR
+git submodule update --recursive --remote --init && msg "Importing patches..."
 
 # Compare kernel versions in order to apply the correct patches
 version_le() {

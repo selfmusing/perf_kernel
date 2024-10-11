@@ -1,0 +1,4 @@
+[submodule "patches"]
+	path = patches
+	url = https://github.com/silvzr/bootlegger_kernel
+	branch = patches
