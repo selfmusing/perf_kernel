@@ -23,7 +23,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        repository: silvzr/KernelSU
+        repository: selfmusing/USlenreK
         fetch-depth: 0
         persist-credentials: false        
         
@@ -39,8 +39,8 @@ jobs:
       if: ${{ steps.check_secret.outputs.exists == 'true' }}
       uses: silvzr/Fork-Sync-With-Upstream-action@v3.4.2
       with:
-        target_sync_repo: silvzr/KernelSU
-        target_sync_branch: non-gki
+        target_sync_repo: selfmusing/USlenreK
+        target_sync_branch: main
         target_repo_token: ${{ secrets.SYNC_UPSTREAM_KSU }}
         upstream_sync_branch: main
         upstream_sync_repo: tiann/KernelSU

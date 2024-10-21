@@ -28,7 +28,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          repository: silvzr/KernelSU
+          repository: selfmusing/USlenreK
           fetch-depth: 0
 
       - name: Write key
