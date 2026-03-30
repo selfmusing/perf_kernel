@@ -38,7 +38,7 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Resize swap
@@ -47,7 +47,7 @@ jobs:
           size: 16G
       - name: Download Manager Artifact
         if: ${{ inputs.include_ksu_manager == 'true' }}
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: manager
           path: out/manager/.
@@ -71,7 +71,7 @@ jobs:
               echo "${{ env.kernel_name }}" > name.txt
           fi
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ env.kernel_name }}
           path: out/*
