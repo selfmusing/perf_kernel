@@ -129,8 +129,8 @@ git config --global http.postBuffer 524288000
 msg "Cloning Clang and Kernel in parallel..."
 # Kernel
 (
-    git clone --depth=1 $KERNEL_GIT --single-branch -b $KERNEL_BRANCH $KERNEL_DIR
-) &
+    git clone --depth=10 $KERNEL_GIT --single-branch -b $KERNEL_BRANCH $KERNEL_DIR && cd $KERNEL_DIR && git reset --hard 106ec755faf9
+ && cd  ) &
 KERNEL_PID=$!
 
 # Clang
